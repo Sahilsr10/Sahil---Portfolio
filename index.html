@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Sahil Srivastava</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #0c0f14;
+      --surface:   #131720;
+      --surface2:  #181d28;
+      --border:    #1f2636;
+      --border2:   #2a3348;
+      --muted:     #4a5568;
+      --body:      #8b99b5;
+      --heading:   #e8edf5;
+      --accent:    #6b9fff;
+      --accent2:   #a8c4ff;
+      --accentdim: rgba(107,159,255,.10);
+      --radius:    8px;
+      --mono:      'IBM Plex Mono', monospace;
+      --serif:     'Lora', serif;
+      --sans:      'IBM Plex Sans', sans-serif;
+      --max:       900px;
+      --ease:      cubic-bezier(.16,1,.3,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, #1f2636 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: .45;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(107,159,255,.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    section, nav, footer { position: relative; z-index: 1; }
+
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 36px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      background: rgba(12,15,20,.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: .07em; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+      color: var(--muted); text-transform: uppercase; transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--heading); }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
+    .hero-inner {
+      padding: 80px 0 100px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 22px;
+      opacity: 0; animation: fadeUp .7s var(--ease) .1s forwards;
+    }
+    .hero-label::before {
+      content: ''; display: inline-block;
+      width: 24px; height: 1px; background: var(--accent);
+    }
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(40px, 6vw, 72px);
+      color: var(--heading); line-height: 1.08; letter-spacing: -.01em;
+      margin-bottom: 20px;
+      opacity: 0; animation: fadeUp .8s var(--ease) .2s forwards;
+    }
+    .hero-name em { font-style: italic; color: var(--accent2); }
+    .hero-sub {
+      font-size: 15px; font-weight: 300; color: var(--body);
+      max-width: 460px; margin-bottom: 36px;
+      opacity: 0; animation: fadeUp .8s var(--ease) .35s forwards;
+    }
+    .hero-cta {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp .8s var(--ease) .5s forwards;
+    }
+
+    /* AVATAR */
+    .hero-avatar-wrap {
+      opacity: 0; animation: fadeUp .9s var(--ease) .3s forwards; flex-shrink: 0;
+    }
+    .avatar-ring {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+    }
+    .avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--border2);
+      animation: spin 18s linear infinite;
+      z-index: 1;
+    }
+    .avatar-ring::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      border-top-color: var(--accent);
+      border-right-color: var(--accent);
+      animation: spin 18s linear infinite;
+      z-index: 1;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center 36%;
+        display: block;
+        position: relative;
+        z-index: 2;
+    }
+    .avatar-placeholder {
+      width: 200px; height: 200px; border-radius: 50%;
+      background: linear-gradient(135deg, #171f30 0%, #1e2c45 100%);
+      border: 3px solid var(--border2);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 8px;
+      cursor: pointer; transition: border-color .2s, background .2s;
+    }
+    .avatar-placeholder:hover { border-color: var(--accent); background: #1a2540; }
+    .avatar-placeholder svg { color: var(--muted); }
+    .avatar-placeholder span { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .08em; }
+    #avatarInput { display: none; }
+    .avatar-status {
+      text-align: center; margin-top: 10px;
+      font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .07em;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: var(--radius);
+      font-family: var(--mono); font-size: 11px; letter-spacing: .07em;
+      cursor: pointer; transition: all .2s var(--ease); border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--accent); color: #0c0f14; font-weight: 500; }
+    .btn-primary:hover {
+      background: #85b3ff; transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(107,159,255,.22);
+    }
+    .btn-ghost { background: transparent; color: var(--body); border-color: var(--border2); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent2); transform: translateY(-1px); }
+
+    /* SECTIONS */
+    section { padding: 96px 0; }
+    .section-label {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(26px, 4vw, 38px);
+      color: var(--heading); line-height: 1.15; margin-bottom: 52px;
+    }
+    .divider { border: none; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .about-text p + p { margin-top: 16px; }
+    .about-text p { color: var(--body); font-size: 14.5px; }
+    .skills-group { margin-bottom: 26px; }
+    .skills-group-label {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .13em;
+      color: var(--muted); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .skills-list { display: flex; flex-wrap: wrap; gap: 7px; }
+    .skill-tag {
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 4px; font-family: var(--mono); font-size: 11px;
+      color: var(--body); padding: 4px 10px; transition: all .2s;
+    }
+    .skill-tag:hover { border-color: var(--accent); color: var(--accent2); background: var(--accentdim); }
+
+    /* PROJECTS */
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative; display: block;
+    }
+    .project-card:hover {
+      border-color: var(--border2); transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
+    .project-arrow {
+      position: absolute; top: 24px; right: 24px; font-size: 14px;
+      color: var(--muted); transition: color .2s, transform .2s;
+    }
+    .project-card:hover .project-arrow { color: var(--accent); transform: translate(2px,-2px); }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+    .project-tag {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .07em;
+      color: var(--accent); background: var(--accentdim);
+      border: 1px solid rgba(107,159,255,.2); padding: 3px 8px; border-radius: 3px;
+    }
+    .project-title { font-family: var(--serif); font-size: 18px; color: var(--heading); margin-bottom: 10px; padding-right: 28px; }
+    .project-desc { font-size: 13px; color: var(--body); line-height: 1.7; }
+    .project-card.featured { grid-column: 1 / -1; }
+
+    /* EXPERIENCE */
+    .timeline-item {
+      display: grid; grid-template-columns: auto 1fr; gap: 20px;
+      padding: 28px 0; border-top: 1px solid var(--border);
+      align-items: start;
+    }
+    .timeline-item:last-child { border-bottom: 1px solid var(--border); }
+    .timeline-logo {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; overflow: hidden; margin-top: 2px;
+    }
+    .timeline-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 6px;
+        filter: none;
+        opacity: 1;
+    }
+    .timeline-logo-placeholder {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      color: var(--accent); letter-spacing: .03em; user-select: none;
+    }
+    .timeline-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 3px; flex-wrap: wrap; }
+    .timeline-date { font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--muted); }
+    .timeline-role { font-size: 15px; font-weight: 500; color: var(--heading); margin-bottom: 3px; }
+    .timeline-company { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 8px; }
+    .timeline-desc { font-size: 13px; color: var(--body); }
+
+    /* CERTIFICATIONS */
+    .certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .cert-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px 20px;
+      transition: border-color .2s, transform .2s;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .cert-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .cert-issuer-row { display: flex; align-items: center; gap: 10px; }
+    .cert-logo {
+      width: 36px; height: 36px; border-radius: 7px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .cert-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 5px;
+        filter: none;
+        opacity: 1;
+    }
+    .cert-logo-placeholder {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      color: var(--accent);
+    }
+    .cert-issuer { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .06em; }
+    .cert-name { font-size: 13.5px; font-weight: 500; color: var(--heading); line-height: 1.4; }
+    .cert-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .cert-date { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+    .cert-badge {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .08em;
+      color: var(--accent); background: var(--accentdim);
+      border: 1px solid rgba(107,159,255,.2); padding: 2px 7px; border-radius: 3px;
+    }
+    .cert-link { font-family: var(--mono); font-size: 10px; color: var(--accent); opacity: .7; transition: opacity .2s; }
+    .cert-card:hover .cert-link { opacity: 1; }
+
+    /* ACHIEVEMENTS */
+    .achievements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .achievement-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      display: flex; gap: 18px; align-items: flex-start;
+      transition: border-color .2s, transform .2s;
+    }
+    .achievement-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .achievement-icon {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: var(--accentdim); border: 1px solid rgba(107,159,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 18px;
+    }
+    .achievement-title { font-size: 14px; font-weight: 500; color: var(--heading); margin-bottom: 4px; }
+    .achievement-desc { font-size: 12.5px; color: var(--body); line-height: 1.6; }
+    .achievement-meta {
+      display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap;
+    }
+    .achievement-tag {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .07em;
+      color: var(--muted); background: var(--surface2);
+      border: 1px solid var(--border2); padding: 2px 7px; border-radius: 3px;
+    }
+
+    /* CV */
+    #cv { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .cv-inner { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+    .cv-title { font-family: var(--serif); font-size: 26px; color: var(--heading); margin-bottom: 8px; }
+    .cv-text p { font-size: 13px; color: var(--body); max-width: 420px; }
+    .cv-actions { display: flex; gap: 12px; flex-shrink: 0; }
+
+    /* CONTACT */
+    .contact-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .contact-link {
+      display: flex; align-items: center; gap: 9px;
+      border: 1px solid var(--border2); border-radius: var(--radius);
+      padding: 12px 20px; font-family: var(--mono); font-size: 11px;
+      letter-spacing: .05em; color: var(--body); transition: all .2s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent2); background: var(--accentdim); transform: translateY(-2px); }
+    .contact-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* FOOTER */
+    footer { padding: 30px 0; border-top: 1px solid var(--border); }
+    footer .container { display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .65s var(--ease), transform .65s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 720px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-avatar-wrap { order: -1; }
+      .avatar-ring, .avatar-img, .avatar-placeholder { width: 130px; height: 130px; }
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-column: 1; }
+      .timeline-item { grid-template-columns: 1fr; gap: 4px; }
+      .timeline-logo { display: none; }
+      .certs-grid { grid-template-columns: 1fr 1fr; }
+      .achievements-grid { grid-template-columns: 1fr; }
+      .cv-inner { flex-direction: column; align-items: flex-start; }
+      .nav-links { gap: 14px; }
+      footer .container { flex-direction: column; gap: 6px; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .certs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <span class="nav-logo"><!-- EDIT: your initials/handle -->SS</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#certifications">Certs</a></li>
+      <li><a href="#achievements">Awards</a></li>
+      <li><a href="#cv">CV</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="hero-label">Data Science • Machine Learning • Data Engineering</p>
+        <h1 class="hero-name"><!-- EDIT: your name -->Sahil <em>Srivastava</em></h1>
+        <p class="hero-sub">
+          Designing data-driven systems and machine learning solutions for real-world impact.
+          Currently pursuing a B.Tech in Computer Science with a focus on scalable data engineering and applied AI.
+        </p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="#cv" class="btn btn-ghost">Download CV</a>
+          <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+        </div>
+      </div>
+
+      <!-- AVATAR — click to preview, or swap placeholder div with <img class="avatar-img" src="photo.jpg" alt="Name"> -->
+      <div class="hero-avatar-wrap">
+        <div class="avatar-ring" id="avatarRing">
+          <img class="avatar-img" src="./avatar.png" alt="Sahil Srivastava">
+        </div>
+        <p class="avatar-status" id="avatarStatus"></p>
+        <input type="file" id="avatarInput" accept="image/*">
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <p class="section-label reveal">About</p>
+    <h2 class="section-title reveal">Who I am</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm a Computer Science undergraduate at Lovely Professional University with a strong focus on data science,
+          machine learning, and data engineering. I enjoy working on real-world datasets and building systems that turn
+          raw data into meaningful insights and scalable solutions.
+        </p>
+        <p>
+          My recent work includes developing predictive models, performing large-scale exploratory data analysis,
+          and building data pipelines using tools like Python, PySpark, and Power BI. I’m particularly interested in
+          solving problems that combine statistical thinking with practical implementation.
+        </p>
+        <p>
+          Beyond academics, I actively practice data structures and algorithms, participate in coding contests,
+          and continuously explore new technologies in AI and data engineering. I'm currently seeking opportunities
+          where I can contribute, learn, and build impactful data-driven products.
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="skills-group">
+          <p class="skills-group-label">Languages/Web Tech</p>
+          <div class="skills-list">
+            <!-- EDIT: your languages -->
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">C++</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">Java</span>
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">JavaScript</span>
+          </div>
+        </div>
+        <div class="skills-group">
+          <p class="skills-group-label">Data & ML</p>
+          <div class="skills-list">
+            <!-- EDIT: your ML stack --> 
+            <span class="skill-tag">EDA</span>
+            <span class="skill-tag">scikit-learn</span>
+            <span class="skill-tag">Pandas</span>
+            <span class="skill-tag">NumPy</span>
+            <span class="skill-tag">Seaborn</span>
+            <span class="skill-tag">Matplotlib</span>
+            <span class="skill-tag">PySpark</span>
+            <span class="skill-tag">Hypothesis Testing</span>
+          </div>
+        </div>
+         <!-- Soft & Business Skills: Communication, Problem-Solving, Business Impact Assessment, Presentation Design, Client Collaboration -->
+         <div class="skills-group">
+          <p class="skills-group-label">Soft & Business Skills</p>
+          <div class="skills-list">
+            <!-- EDIT: your sf stack --> 
+            <span class="skill-tag">Communication</span>
+            <span class="skill-tag">Problem-Solving</span>
+            <span class="skill-tag">Pandas</span>
+            <span class="skill-tag">Business Impact Assessment</span>
+            <span class="skill-tag">Presentation Design</span>
+            <span class="skill-tag">Client Collaboration</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label reveal">Projects</p>
+    <h2 class="section-title reveal">Things I've built</h2>
+    <div class="projects-grid">
+
+      <!-- EDIT: featured project -->
+      <a class="project-card featured reveal" href="https://github.com/Sahilsr10/Meteorite-Landings-Analysis" target="_blank" rel="noopener">
+        <span class="project-arrow">↗</span>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">EDA</span>
+          <span class="project-tag">ML</span>
+        </div>
+        <h3 class="project-title">Geospatial & Predictive Analysis of Meteorite Landings</h3>
+        <p class="project-desc">
+          Performed end-to-end EDA on 45,000+ NASA meteorite records using Python.
+          Applied outlier detection (IQR), correlation analysis (heatmaps), and hypothesis testing (P &lt; 0.05)
+          to analyze differences between “Fell” and “Found” meteorites. Derived geospatial and temporal insights.
+        </p>
+      </a>
+
+      <!-- EDIT: project 2 -->
+      <a class="project-card reveal" href="https://github.com/Sahilsr10/us-mortality-trend-analysis" target="_blank" rel="noopener">
+        <span class="project-arrow">↗</span>
+        <div class="project-tags">
+          <span class="project-tag">Power BI</span>
+          <span class="project-tag">DAX</span>
+          <span class="project-tag">Analytics</span>
+        </div>
+        <h3 class="project-title">Silent Epidemic Mortality Analysis Dashboard</h3>
+        <p class="project-desc">
+          Analyzed 10,000+ mortality records (NCHS dataset) and built an interactive Power BI dashboard.
+          Used DAX and decomposition tree analysis to identify high-growth mortality clusters and forecast trends,
+          predicting a 10–12% increase in accidental deaths.
+        </p>
+      </a>
+
+      <!-- EDIT: project 3 -->
+      <a class="project-card reveal" href="https://github.com/Sahilsr10/Delta-Lake-Data-Engineering-Pipeline" target="_blank" rel="noopener">
+        <span class="project-arrow">↗</span>
+        <div class="project-tags">
+          <span class="project-tag">PySpark</span>
+          <span class="project-tag">Delta Lake</span>
+          <span class="project-tag">Data Engineering</span>
+        </div>
+        <h3 class="project-title">Delta Lake Data Engineering Pipeline</h3>
+        <p class="project-desc">
+          Built a scalable data engineering pipeline using Delta Lake and PySpark to support real-time incremental data ingestion.
+          Implemented version-controlled data processing and ensured consistency across datasets with structured streaming workflows.
+        </p>
+      </a>
+
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label reveal">Experience</p>
+    <h2 class="section-title reveal">Where I've worked</h2>
+    <div class="timeline">
+
+      <!-- EDIT: replace logo-url with actual company logo URL, or remove the <img> and keep the initials fallback -->
+      <div class="timeline-item reveal">
+        <div class="timeline-logo">
+        <img src="./celebal.png" alt="celebaltech">
+        </div>
+        <div>
+          <div class="timeline-meta">
+            <p class="timeline-role">Data Engineering Intern</p>
+            <span class="timeline-date">Jun 2025 – Aug 2025</span>
+          </div>
+          <p class="timeline-company">Celebal Technologies</p>
+          <p class="timeline-desc">
+            Architected a scalable data ingestion pipeline using Delta Lake, PySpark, and Structured Streaming,
+            enabling real-time incremental data processing with version control.
+            Developed automated data generation and ingestion workflows, ensuring consistency across datasets.
+            Integrated an email notification system with HTML-based insights, improving monitoring and reducing manual intervention.
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-logo">
+          <img src="./techfest.png" alt="Techfest">
+        </div>
+        <div>
+          <div class="timeline-meta">
+            <p class="timeline-role">Campus Ambassador Intern</p>
+            <span class="timeline-date">June 2024 – Dec 2024</span>
+          </div>
+          <p class="timeline-company">Techfest, IIT Bombay</p>
+          <p class="timeline-desc">
+            Led marketing campaigns across digital and offline channels, significantly increasing student engagement.
+            Managed and coordinated a network of 100+ students and faculty to expand outreach across colleges.
+            Collaborated with industry partners to promote workshops and competitions, boosting event participation.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <p class="section-label reveal">Certifications</p>
+    <h2 class="section-title reveal">What I'm certified in</h2>
+    <div class="certs-grid">
+
+      <!-- EDIT each cert card. For logos use: <img src="https://logo.clearbit.com/aws.amazon.com" alt="AWS"> -->
+      <div class="cert-card reveal">
+        <div class="cert-issuer-row">
+          <div class="cert-logo">
+            <img src="./oracle.png" alt="Oracle">
+          </div>
+          <span class="cert-issuer">Oracle University</span>
+        </div>
+        <p class="cert-name">Oracle AI Foundations Associate 1Z0-1122-24</p>
+        <div class="cert-footer">
+          <span class="cert-date">Apr 2025</span>
+          <span class="cert-badge">Valid 3 yrs</span>
+        </div>
+        <!-- EDIT: add credential link -->
+        <!-- <a href="https://verify.link" target="_blank" class="cert-link">Verify ↗</a> -->
+      </div>
+
+      <div class="cert-card reveal">
+        <div class="cert-issuer-row">
+          <div class="cert-logo">
+            <img src="./infosys.png" alt="AI">
+          </div>
+          <span class="cert-issuer">Infosys Springboard</span>
+        </div>
+        <p class="cert-name">Master Generative AI & Generative AI tools (ChatGPT & more)</p>
+        <div class="cert-footer">
+          <span class="cert-date">Aug 2025</span>
+          <span class="cert-badge">Lifetime</span>
+        </div>
+      </div>
+
+      <div class="cert-card reveal">
+        <div class="cert-issuer-row">
+          <div class="cert-logo">
+            <img src="./oracle.png" alt="Orc">
+          </div>
+          <span class="cert-issuer">Oracle University</span>
+        </div>
+        <p class="cert-name">Oracle Generative AI Professional 1Z0-1127-24</p>
+        <div class="cert-footer">
+          <span class="cert-date">May 2024</span>
+          <span class="cert-badge">Valid 3 yrs</span>
+        </div>
+      </div>
+
+      <div class="cert-card reveal">
+        <div class="cert-issuer-row">
+          <div class="cert-logo">
+            <img src="./nptel.png" alt="NPTEL">
+          </div>
+          <span class="cert-issuer">NPTEL</span>
+        </div>
+        <p class="cert-name">Privacy and Security in Online Social Media</p>
+        <div class="cert-footer">
+          <span class="cert-date">May 2024</span>
+          <span class="cert-badge">Lifetime</span>
+        </div>
+      </div>
+
+      <div class="cert-card reveal">
+        <div class="cert-issuer-row">
+          <div class="cert-logo">
+            <img src="./cisco.png" alt="Cisco">
+          </div>
+          <span class="cert-issuer">Cisco</span>
+        </div>
+        <p class="cert-name"> Introduction to Data Science</p>
+        <div class="cert-footer">
+          <span class="cert-date">Jan 2026</span>
+          <span class="cert-badge">Lifetime</span>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="container">
+    <p class="section-label reveal">Achievements</p>
+    <h2 class="section-title reveal">Highlights & Awards</h2>
+    <div class="achievements-grid">
+
+      <div class="achievement-card reveal">
+        <div class="achievement-icon">💻</div>
+        <div>
+          <p class="achievement-title">Solved 290+ DSA Problems</p>
+          <p class="achievement-desc">
+            Solved 290+ problems across platforms including 100+ on LeetCode,
+            covering Trees, Graphs, Linked Lists, and core algorithmic concepts.
+          </p>
+          <div class="achievement-meta">
+            <span class="achievement-tag">DSA</span>
+            <span class="achievement-tag">LeetCode</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="achievement-card reveal">
+        <div class="achievement-icon">📈</div>
+        <div>
+          <p class="achievement-title">LeetCode Rating — 1466</p>
+          <p class="achievement-desc">
+            Achieved a contest rating of 1466 on LeetCode,
+            demonstrating strong problem-solving and competitive programming skills.
+          </p>
+          <div class="achievement-meta">
+            <span class="achievement-tag">Competitive Programming</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="achievement-card reveal">
+        <div class="achievement-icon">🏅</div>
+        <div>
+          <p class="achievement-title">CodeChef Rating — 1127</p>
+          <p class="achievement-desc">
+            Secured a rating of 1127 on CodeChef through consistent participation
+            in rated contests and algorithmic challenges.
+          </p>
+          <div class="achievement-meta">
+            <span class="achievement-tag">CodeChef</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="achievement-card reveal">
+        <div class="achievement-icon">🔥</div>
+        <div>
+          <p class="achievement-title">LeetCode 50 Days Badge</p>
+          <p class="achievement-desc">
+            Earned the LeetCode 50 Days Badge by maintaining consistent daily problem-solving streak.
+          </p>
+          <div class="achievement-meta">
+            <span class="achievement-tag">Consistency</span>
+            <span class="achievement-tag">LeetCode</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CV -->
+<section id="cv">
+  <div class="container">
+    <div class="cv-inner">
+      <div class="cv-text reveal">
+        <h2 class="cv-title">Curriculum Vitae</h2>
+        <p>Full résumé with coursework, publications, and references — updated December 2024.</p>
+      </div>
+      <div class="cv-actions reveal">
+        <!--
+          EDIT: set href to your CV file.
+          Put your PDF next to this HTML file and use:  href="your-cv.pdf"
+        -->
+        <a href="./sahil_lpu_SF.pdf" download class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download CV
+        </a>
+        <a href="./sahil_lpu_SF.pdf" target="_blank" class="btn btn-ghost">View PDF</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label reveal">Contact</p>
+    <h2 class="section-title reveal">Let's talk</h2>
+    <div class="contact-links reveal">
+      <!-- EDIT: your actual links -->
+      <a href="sahilsrivastava773@email.com" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </svg>
+        sahilsrivastava773@gmail.com
+      </a>
+      <a href="https://linkedin.com/in/sahilsriv/" target="_blank" rel="noopener" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+          <rect x="2" y="9" width="4" height="12"/>
+          <circle cx="4" cy="4" r="2"/>
+        </svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/Sahilsr10" target="_blank" rel="noopener" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p><!-- EDIT: your name -->© 2025 Sahil Srivastava</p>
+    <p>Back to top <a href="#hero" style="color:var(--accent)">↑</a></p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const idx = [...e.target.parentElement.children].indexOf(e.target);
+      e.target.style.transitionDelay = (idx * 55) + 'ms';
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 130) current = s.id; });
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+  }, { passive: true });
+
+  // Avatar upload preview
+  const input = document.getElementById('avatarInput');
+  const ring  = document.getElementById('avatarRing');
+  const status = document.getElementById('avatarStatus');
+  input.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = document.createElement('img');
+    img.className = 'avatar-img';
+    img.src = URL.createObjectURL(file);
+    img.alt = 'Profile photo';
+    img.style.cursor = 'pointer';
+    img.title = 'Click to change photo';
+    img.onclick = () => input.click();
+    ring.replaceChild(img, document.getElementById('avatarPlaceholder') || ring.firstElementChild);
+    status.textContent = file.name;
+  });
+</script>
+</body>
+</html>
